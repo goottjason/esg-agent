@@ -1,0 +1,54 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.5.8' apply false
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.adnstyle'
+version = '0.0.1-SNAPSHOT'
+description = 'ESG A.gent project for Spring Boot'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+        }
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    dependencies {
+        // 모든 모듈 공통 Lombok
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.compilerArgs.add('-parameters')
+        options.encoding = 'UTF-8'
+    }
+}
+
+subprojects {
+    apply plugin: 'org.springframework.boot'
+
+    ext {
+        set('springCloudVersion', '2023.0.0')
+    }
+}

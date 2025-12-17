@@ -1,0 +1,5 @@
+rootProject.name = 'esg-agent'
+include 'core-api'
+include 'core-db'
+include 'core-enums'
+include 'support'
