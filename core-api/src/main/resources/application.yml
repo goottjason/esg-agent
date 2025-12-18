@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: esg-platform                               # 애플리케이션 이름
+
+  profiles:
+    active: local                                    # 기본 프로파일
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/esgdb      # Postgres 연결 URL
+    username: esguser                                # 사용자
+    password: esgpassword                            # 비밀번호
+    driver-class-name: org.postgresql.Driver         # 드라이버
+    hikari:
+      maximum-pool-size: 10                          # 최대 커넥션
+      minimum-idle: 5                                # 최소 유휴 커넥션
+      connection-timeout: 20000                      # 타임아웃(ms)
+
+  jpa:
+    hibernate:
+      ddl-auto: validate                             # Flyway 기준으로 validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true                             # SQL 포맷팅
+        show_sql: false                              # 콘솔 출력 비활성
+        jdbc.batch_size: 20                          # 배치 크기
+        jdbc.fetch_size: 50                          # fetch size
+        order_inserts: true                          # Insert 정렬
+        order_updates: true                          # Update 정렬
+
+  flyway:
+    enabled: true                                    # Flyway 활성화
+    baseline-on-migrate: true                        # 기존 DB에도 마이그레이션 허용
+    locations: classpath:db/migration                # SQL 위치
+    table: flyway_schema_history                     # 히스토리 테이블 이름
+
+server:
+  port: 8080                                         # 서버 포트
+  servlet:
+    context-path: /                                  # 컨텍스트 루트
+
+  compression:
+    enabled: true                                    # 응답 압축
+    min-response-size: 1024                          # 압축 최소 크기
+
+logging:
+  level:
+    root: INFO                                       # 전체 로그 레벨
+    com.adnstyle.esg_agent: DEBUG                    # 프로젝트 패키지 로그 레벨
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"      # 콘솔 로그 포맷

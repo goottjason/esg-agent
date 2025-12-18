@@ -1,18 +1,17 @@
 package com.adnstyle.esg_agent.core.db.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "company_details")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class CompanyDetailEntity extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -20,7 +19,7 @@ public class CompanyDetailEntity extends BaseEntity {
     private CompanyEntity company;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_size_id")
+    @JoinColumn(name = "employee_size_range_id")
     private EmployeeSizeRangeEntity employeeSizeRange;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,16 +30,9 @@ public class CompanyDetailEntity extends BaseEntity {
     @JoinColumn(name = "industry_classification_id")
     private IndustryClassificationEntity industryClassification;
 
-    @Builder
-    public CompanyDetailEntity(CompanyEntity company, EmployeeSizeRangeEntity employeeSizeRange,
-                               RevenueRangeEntity revenueRange, IndustryClassificationEntity industryClassification) {
-        this.company = company;
-        this.employeeSizeRange = employeeSizeRange;
-        this.revenueRange = revenueRange;
-        this.industryClassification = industryClassification;
-    }
-
-    public void updateDetails(EmployeeSizeRangeEntity employeeSizeRange, RevenueRangeEntity revenueRange,
+    // ----- 도메인 메서드
+    public void updateDetails(EmployeeSizeRangeEntity employeeSizeRange,
+                              RevenueRangeEntity revenueRange,
                               IndustryClassificationEntity industryClassification) {
         this.employeeSizeRange = employeeSizeRange;
         this.revenueRange = revenueRange;
